@@ -220,6 +220,30 @@ if ($location == "login") {
         } else {
             echo "Erreur lors de la préparation de la requête.";
         }
+    } elseif ($action == "Loaddata") {
+        $options = array();
+        $stmt = $pdo->prepare('SELECT * FROM `Candidat` ORDER BY `Candidat`.`NumCand` DESC');
+        if ($stmt) {
+            if ($stmt->execute()) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $options[] = $row;
+                }
+
+                $dataset = array(
+                    "echo" => 1,
+                    "totalrecords" => count($options),
+                    "totaldisplayrecords" => count($options),
+                    "data" => $options
+                );
+
+                echo json_encode($dataset);
+
+            } else {
+                echo "Erreur lors de l'exécution de la requête.";
+            }
+        } else {
+            echo "Erreur lors de la préparation de la requête.";
+        }
     }
 } elseif ($location == "Document") {
     extract($_POST);
